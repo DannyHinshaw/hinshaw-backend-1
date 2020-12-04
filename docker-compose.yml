@@ -27,4 +27,4 @@ services:
     depends_on:
       - db
     environment:
-      PSQL_CONNECT_STRING: "postgres://philanthropic:narwhal@localhost:5432/skynet"
+      DATABASE_URL: "postgres://philanthropic:narwhal@localhost:5432/skynet"
