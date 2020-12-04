@@ -1,3 +1,5 @@
+![Go](https://github.com/DannyHinshaw/hinshaw-backend-1/workflows/Go/badge.svg)
+
 # hinshaw-backend-1
 
 A simple web app to demonstrate a basic registration/authentication flow and backend implementation.
