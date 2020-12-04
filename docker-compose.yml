@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  client:
+    image: nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=skynet
+      - POSTGRES_USER=philanthropic
+      - POSTGRES_PASSWORD=narwhal
+
+  api:
+    container_name: api
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      PSQL_CONNECT_STRING: "postgres://philanthropic:narwhal@localhost:5432/skynet"
