@@ -19,19 +19,20 @@ func main() {
 	}
 
 	// Init DB and prep for handlers DI.
-	err := db.ParseDB(os.Getenv("DATABASE_URL"))
+	dbs := db.DatabaseService
+	err := dbs.ParseDB(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = db.Init()
+	err = dbs.Init()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer dbs.Close()
 
 	// Setup Echo framework
 	e := echo.New()
-	h := handlers.NewHandler(db.DatabaseService)
+	h := handlers.NewHandler(&dbs)
 
 	// Setup middlewares
 	e.Use(middleware.CORS())

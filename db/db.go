@@ -5,6 +5,14 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+type IService interface {
+	parse(dbURL string) error
+	ParseDB(dbURL string) error
+	init() error
+	Init() error
+	Close()
+}
+
 type Service struct {
 	*pgxpool.Pool
 	*pgxpool.Config
@@ -28,16 +36,16 @@ func (s *Service) init() error {
 }
 
 // Util wrapper for parse to handle error.
-func ParseDB(dbURL string) error {
-	return DatabaseService.parse(dbURL)
+func (s *Service) ParseDB(dbURL string) error {
+	return s.parse(dbURL)
 }
 
 // Util wrapper to initialize pgx pool.
-func Init() error {
-	return DatabaseService.init()
+func (s *Service) Init() error {
+	return s.init()
 }
 
 // Util func to close pgx pool.
-func Close() {
-	DatabaseService.Pool.Close()
+func (s *Service) Close() {
+	s.Pool.Close()
 }

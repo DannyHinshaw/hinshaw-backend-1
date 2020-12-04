@@ -10,13 +10,13 @@ import (
 )
 
 type Handler struct {
-	DBService db.Service
+	DBService db.IService
 	Context   context.Context
 	UserId    string
 }
 
 // Create a new Handler with option for DI.
-func NewHandler(dbService db.Service) *Handler {
+func NewHandler(dbService db.IService) *Handler {
 	return &Handler{
 		DBService: dbService,
 	}
