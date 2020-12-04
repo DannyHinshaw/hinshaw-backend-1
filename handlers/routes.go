@@ -15,6 +15,6 @@ func (h *Handler) RegisterRoutes(v1 *echo.Echo) {
 	v1.POST("/login", h.POSTLogin)
 	v1.POST("/logout", h.POSTLogout)
 
-	// TODO: Users (for data demo)
-	v1.GET("/users/:userId", h.GETHealth)
+	// TODO: User credit scores (for data demo)
+	v1.GET("/scores", h.GETHealth)
 }
