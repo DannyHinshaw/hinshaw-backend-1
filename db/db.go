@@ -24,6 +24,11 @@ var DatabaseService = Service{}
 func (s *Service) parse(dbURL string) error {
 	var err error
 	s.Config, err = pgxpool.ParseConfig(dbURL)
+	s.Config.ConnConfig.RuntimeParams = map[string]string{
+		"standard_conforming_string": "on",
+	}
+	s.Config.ConnConfig.PreferSimpleProtocol = true
+
 	return err
 }
 
