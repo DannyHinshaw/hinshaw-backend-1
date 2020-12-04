@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hinshaw-backend-1/db"
 	t "hinshaw-backend-1/test"
 
 	"io"
@@ -23,7 +24,13 @@ type HandlersTestSuite struct {
 
 // Reset mock service and mock data.
 func (suite *HandlersTestSuite) SetupTest() {
-	h = NewHandler()
+	mockDB := &db.MockService{}
+	err := mockDB.ParseDB(os.Getenv("DATABASE_URL"))
+	suite.NoError(err)
+	err = mockDB.Init()
+	suite.NoError(err)
+
+	h = NewHandler(mockDB)
 	h.UserId = t.UserUUID
 }
 

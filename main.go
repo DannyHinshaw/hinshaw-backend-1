@@ -1,24 +1,32 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"hinshaw-backend-1/db"
 	"hinshaw-backend-1/handlers"
 	mw "hinshaw-backend-1/middleware"
 	"log"
+	"os"
 )
 
 func main() {
 
-	// Initialize environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Printf("godotenv.Load: %v\n", err)
+	// Init DB and prep for handlers DI.
+	dbs := db.DatabaseService
+	err := dbs.ParseDB(os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Fatal(err)
 	}
+	err = dbs.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer dbs.Close()
 
 	// Setup Echo framework
 	e := echo.New()
-	h := handlers.NewHandler()
+	h := handlers.NewHandler(&dbs)
 
 	// Setup middlewares
 	e.Use(middleware.CORS())

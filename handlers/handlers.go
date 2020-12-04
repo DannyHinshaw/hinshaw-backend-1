@@ -5,24 +5,28 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"hinshaw-backend-1/db"
+	mw "hinshaw-backend-1/middleware"
 )
 
 type Handler struct {
-	Context context.Context
-	UserId  string
+	DBService db.IService
+	Context   context.Context
+	UserId    string
 }
 
-// Create a new Handler with option for DI..
-func NewHandler() *Handler {
-	return &Handler{}
+// Create a new Handler with option for DI.
+func NewHandler(dbService db.IService) *Handler {
+	return &Handler{
+		DBService: dbService,
+	}
 }
 
 // Handler middleware to assign handler values centrally.
 func (h *Handler) HandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		h.Context = c.Request().Context()
-		// TODO: FIXME
-		//h.UserId = mw.GetUserId(c)
+		h.UserId = mw.GetUserId(c)
 
 		return next(c)
 	}
