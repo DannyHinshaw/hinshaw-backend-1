@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  client:
+  web:
     image: nginx
     ports:
       - 8000:80
@@ -10,7 +10,6 @@ services:
 
   db:
     image: postgres
-    restart: always
     environment:
       - POSTGRES_DB=skynet
       - POSTGRES_USER=philanthropic
@@ -27,4 +26,4 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: "postgres://philanthropic:narwhal@localhost:5432/skynet"
+      DATABASE_URL: "postgres://philanthropic:narwhal@db:5432/skynet"

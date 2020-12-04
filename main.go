@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"hinshaw-backend-1/db"
@@ -12,11 +11,6 @@ import (
 )
 
 func main() {
-
-	// Initialize environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Printf("godotenv.Load: %v\n", err)
-	}
 
 	// Init DB and prep for handlers DI.
 	dbs := db.DatabaseService

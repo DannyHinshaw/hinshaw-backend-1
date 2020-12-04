@@ -15,5 +15,6 @@ FROM gcr.io/distroless/static
 
 # Copy over binary
 COPY --from=builder /app/api /api
+COPY --from=builder /app/db/seed.sql /seed.sql
 
 ENTRYPOINT ["/api"]
