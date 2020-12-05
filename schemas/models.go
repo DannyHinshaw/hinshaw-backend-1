@@ -1,4 +1,4 @@
-package db
+package schemas
 
 // Application users
 type AppUser struct {

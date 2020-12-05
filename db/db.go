@@ -10,6 +10,9 @@ import (
 )
 
 type IService interface {
+	AddNewUser(email string, password string, ctx context.Context) error
+	QueryUserEmailExists(email string, ctx context.Context) (bool, error)
+	QueryUserAuth(email string, ctx context.Context) (*UserAuth, error)
 	QueryAllCustomers(ctx context.Context) ([]CustomerScores, error)
 	ParseDB(dbURL string) error
 	Init() error

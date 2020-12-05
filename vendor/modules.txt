@@ -1,6 +1,7 @@
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
 github.com/dgrijalva/jwt-go
 # github.com/georgysavva/scany v0.2.7
 ## explicit
@@ -44,6 +45,9 @@ github.com/mattn/go-colorable
 github.com/mattn/go-isatty
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
+# github.com/satori/go.uuid v1.2.0
+## explicit
+github.com/satori/go.uuid
 # github.com/stretchr/testify v1.5.1
 ## explicit
 github.com/stretchr/testify/assert

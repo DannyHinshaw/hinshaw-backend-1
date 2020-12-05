@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"hinshaw-backend-1/db"
+	"hinshaw-backend-1/schemas"
 	td "hinshaw-backend-1/test"
 
 	"io"
@@ -32,6 +33,13 @@ func (suite *HandlersTestSuite) SetupTest() {
 	suite.NoError(err)
 	err = mockDB.Init()
 	suite.NoError(err)
+
+	// Reset database data
+	db.MockDB = db.MockDatabase{
+		Users:        []*schemas.AppUser{},
+		CreditScores: []*schemas.CreditScore{},
+		Customers:    []*schemas.Customer{},
+	}
 
 	h = NewHandler(mockDB)
 	h.UserId = td.UserUUID
