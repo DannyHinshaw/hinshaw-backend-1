@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"hinshaw-backend-1/cache"
 	"hinshaw-backend-1/db"
-	t "hinshaw-backend-1/test"
+	"hinshaw-backend-1/schemas"
+	td "hinshaw-backend-1/test"
 
 	"io"
 	"net/http/httptest"
@@ -24,14 +26,25 @@ type HandlersTestSuite struct {
 
 // Reset mock service and mock data.
 func (suite *HandlersTestSuite) SetupTest() {
+	err := os.Setenv("JWT_SECRET", td.JwtSecret)
+	suite.NoError(err)
+
 	mockDB := &db.MockService{}
-	err := mockDB.ParseDB(os.Getenv("DATABASE_URL"))
+	err = mockDB.ParseDB(os.Getenv("DATABASE_URL"))
 	suite.NoError(err)
 	err = mockDB.Init()
 	suite.NoError(err)
 
-	h = NewHandler(mockDB)
-	h.UserId = t.UserUUID
+	// Reset database data
+	db.MockDB = db.MockDatabase{
+		Users:        []*schemas.AppUser{},
+		CreditScores: []*schemas.CreditScore{},
+		Customers:    []*schemas.Customer{},
+	}
+
+	mockRedis := cache.NewMockRedis()
+	h = NewHandler(mockDB, mockRedis)
+	h.UserId = td.UserUUID
 }
 
 // Util function to bootstrap a test authed API request with boilerplate.
@@ -41,7 +54,7 @@ func newTestRequest(method string, url string, body io.Reader, token string) (ec
 	e = echo.New()
 
 	// Register URL endpoints (skip middleware for these tests as they read the request body and ruin it)
-	h.RegisterRoutes(e)
+	h.RegisterRouteHandlers(e)
 
 	req := httptest.NewRequest(method, url, body)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

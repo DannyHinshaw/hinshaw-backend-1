@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"golang.org/x/crypto/bcrypt"
+	mw "hinshaw-backend-1/middleware"
 	"hinshaw-backend-1/schemas"
 	"log"
 	"net/http"
@@ -27,7 +27,16 @@ func (h *Handler) POSTRegister(c echo.Context) error {
 	if email == "" {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Registration missing email.")
 	}
-	// TODO: Check email doesn't exist yet
+
+	userExists, err := h.DBService.QueryUserEmailExists(email, h.Context)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	// Check a user with email doesn't exist yet.
+	if userExists {
+		return echo.NewHTTPError(http.StatusConflict, "A user with that email already exists.")
+	}
 
 	password := payload.Password
 	if len(password) < 5 {
@@ -35,16 +44,13 @@ func (h *Handler) POSTRegister(c echo.Context) error {
 	}
 	// TODO: Any other password restriction checks here.
 
-	// Hash/salt the password to prep for db.
-	bytes := []byte(password)
-	hashedPassword, err := bcrypt.GenerateFromPassword(bytes, bcrypt.DefaultCost)
+	// Add user to db
+	err = h.DBService.AddNewUser(email, password, h.Context)
 	if err != nil {
-		log.Println("error occurred while hashing password::", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
-	fmt.Println(string(hashedPassword))
 
-	return c.JSON(http.StatusOK, "Registered user successfully")
+	return c.JSON(http.StatusOK, "Registered new user successfully.")
 }
 
 // Handles user login with email/password..
@@ -60,32 +66,44 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 	if email == "" {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Login payload missing email.")
 	}
-	// TODO: Check email doesn't exist yet
 
 	password := payload.Password
 	if password == "" {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Login payload missing password.")
 	}
 
-	// TODO: Look up user by email in PG and compare password
+	// Look up users stored password by email and compare against request password.
 	bytes := []byte(password)
-	hashedPasswordDB, err := bcrypt.GenerateFromPassword(bytes, bcrypt.DefaultCost)
-	if err != nil {
-		log.Println("error occurred while hashing password::", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
-
-	err = bcrypt.CompareHashAndPassword(hashedPasswordDB, bytes)
+	userAuth, err := h.DBService.QueryUserAuth(email, h.Context)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials.")
 	}
 
-	// TODO: JWT and user id
-	return c.JSON(http.StatusOK, "User login successful.")
+	err = bcrypt.CompareHashAndPassword([]byte(userAuth.Password), bytes)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials.")
+	}
+
+	jwtPayload, err := mw.GenerateJWT(userAuth.UserId)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	err = h.RedisService.SetKeyStringRedis(jwtPayload.AccessToken, userAuth.UserId)
+	if err != nil {
+		log.Println("error saving jwt in redis on login::", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusOK, jwtPayload)
 }
 
-// Handles user logout.
+// Handles user logout by removing key from redis.
 func (h *Handler) POSTLogout(c echo.Context) error {
-	// TODO: Get JWT from header and parse out user id. Then remove token.
+	h.RedisService.ExpireKey(h.Token)
 	return c.JSON(http.StatusOK, "User logout successful.")
+}
+
+func (h *Handler) POSTValidateToken(c echo.Context) error {
+	return c.JSON(http.StatusOK, "Token validated successfully.")
 }

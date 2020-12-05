@@ -13,7 +13,7 @@ func (suite *HandlersTestSuite) Test_GETCustomers() {
 	e = echo.New()
 
 	// Register URL endpoints (skip middleware for these tests as they read the request body and ruin it)
-	h.RegisterRoutes(e)
+	h.RegisterRouteHandlers(e)
 
 	req := httptest.NewRequest(echo.GET, "/customers", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

@@ -5,20 +5,27 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	"hinshaw-backend-1/cache"
 	"hinshaw-backend-1/db"
 	mw "hinshaw-backend-1/middleware"
+	"log"
+	"net/http"
 )
 
 type Handler struct {
-	DBService db.IService
-	Context   context.Context
-	UserId    string
+	RedisService cache.IService
+	DBService    db.IService
+	Context      context.Context
+	UserId       string
+	Token        string
 }
 
 // Create a new Handler with option for DI.
-func NewHandler(dbService db.IService) *Handler {
+func NewHandler(dbService db.IService, redisService cache.IService) *Handler {
 	return &Handler{
-		DBService: dbService,
+		RedisService: redisService,
+		DBService:    dbService,
 	}
 }
 
@@ -26,8 +33,25 @@ func NewHandler(dbService db.IService) *Handler {
 func (h *Handler) HandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		h.Context = c.Request().Context()
-		h.UserId = mw.GetUserId(c)
+		// TODO: If useful
+		//h.UserId = mw.GetUserId(c)
 
+		return next(c)
+	}
+}
+
+// Checks the JWT in request is also in redis (valid).
+func (h *Handler) JWTRedisMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		token := mw.ExtractToken(c.Request())
+		isValid := h.RedisService.IsKeyInRedis(token)
+		if !isValid {
+			m := "unauthorized token in redis middleware::" + token
+			log.Println(m)
+			return echo.NewHTTPError(http.StatusUnauthorized, "Session expired.")
+		}
+
+		h.Token = token
 		return next(c)
 	}
 }
@@ -41,4 +65,33 @@ func structToJSONString(i interface{}) string {
 	}
 
 	return string(e)
+}
+
+// Register REST API endpoints.
+func (h *Handler) RegisterRouteHandlers(v1 *echo.Echo) {
+
+	/** 	Unrestricted Endpoints
+	===================================*/
+
+	// API Health check
+	v1.GET("/health", h.GETHealth)
+
+	// Auth
+	v1.POST("/register", h.POSTRegister)
+	v1.POST("/login", h.POSTLogin)
+
+	// Restricted group
+	r := v1.Group("")
+	r.Use(middleware.JWTWithConfig(mw.JWTConf))
+	r.Use(h.JWTRedisMiddleware)
+
+	/** 	Restricted Endpoints
+	===================================*/
+
+	// Auth
+	r.POST("/validate", h.POSTValidateToken)
+	r.POST("/logout", h.POSTLogout)
+
+	// Customers
+	r.GET("/customers", h.GETCustomers)
 }
