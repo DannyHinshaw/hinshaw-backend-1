@@ -1,6 +1,7 @@
 package db
 
 import (
+	"context"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
@@ -25,6 +26,13 @@ func (suite *MockDatabaseTestSuite) TestMockService_ParseDB() {
 func (suite *MockDatabaseTestSuite) TestMockService_Init() {
 	err := DBMockService.Init()
 	suite.NoError(err)
+}
+
+func (suite *MockDatabaseTestSuite) TestMockService_QueryAllCustomers() {
+	ctx := context.Background()
+	customers, err := DBMockService.QueryAllCustomers(ctx)
+	suite.NoError(err)
+	suite.Len(customers, 4)
 }
 
 // Run the MockDatabaseTestSuite test suite.

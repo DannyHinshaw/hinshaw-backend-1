@@ -10,9 +10,8 @@ import (
 )
 
 type IService interface {
-	parse(dbURL string) error
+	QueryAllCustomers(ctx context.Context) ([]CustomerScores, error)
 	ParseDB(dbURL string) error
-	init() error
 	Init() error
 	Close()
 }
