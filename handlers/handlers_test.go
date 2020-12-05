@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"hinshaw-backend-1/cache"
 	"hinshaw-backend-1/db"
 	"hinshaw-backend-1/schemas"
 	td "hinshaw-backend-1/test"
@@ -41,7 +42,8 @@ func (suite *HandlersTestSuite) SetupTest() {
 		Customers:    []*schemas.Customer{},
 	}
 
-	h = NewHandler(mockDB)
+	mockRedis := cache.NewMockRedis()
+	h = NewHandler(mockDB, mockRedis)
 	h.UserId = td.UserUUID
 }
 

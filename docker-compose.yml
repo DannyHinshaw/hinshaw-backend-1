@@ -15,6 +15,9 @@ services:
       POSTGRES_USER: "philanthropic"
       POSTGRES_PASSWORD: "narwhal"
 
+  redis:
+    image: redis:alpine
+
   api:
     container_name: api
     restart: always
@@ -26,5 +29,6 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: "postgres://philanthropic:narwhal@db:5432/skynet"
       JWT_SECRET: "99AE99706241529D636298C3C0441FE927344BEB064972EC0AE2223CE8DE3C59"
+      DATABASE_URL: "postgres://philanthropic:narwhal@db:5432/skynet"
+      REDIS_URL: "redis:6379"

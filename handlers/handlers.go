@@ -5,19 +5,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
+	"hinshaw-backend-1/cache"
 	"hinshaw-backend-1/db"
 )
 
 type Handler struct {
-	DBService db.IService
-	Context   context.Context
-	UserId    string
+	RedisService cache.IService
+	DBService    db.IService
+	Context      context.Context
+	UserId       string
 }
 
 // Create a new Handler with option for DI.
-func NewHandler(dbService db.IService) *Handler {
+func NewHandler(dbService db.IService, redisService cache.IService) *Handler {
 	return &Handler{
-		DBService: dbService,
+		RedisService: redisService,
+		DBService:    dbService,
 	}
 }
 
