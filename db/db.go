@@ -40,6 +40,32 @@ func (s *Service) parse(dbURL string) error {
 	return err
 }
 
+// Handles seeding the database with seed.go file.
+func (s *Service) seed() error {
+	path, err := filepath.Abs("seed.sql")
+	if err != nil {
+		log.Fatal("error retrieving seed.sql file path::", err)
+		return err
+	}
+
+	bytes, ioErr := ioutil.ReadFile(path)
+	if ioErr != nil {
+		log.Fatal("error reading seed.sql file::", ioErr)
+		return err
+	}
+
+	ctx := context.Background()
+	sql := string(bytes)
+	_, err = s.Pool.Exec(ctx, sql)
+	if err != nil {
+		log.Println("error executing seed SQL::", err)
+		return err
+	}
+
+	log.Println("database seeded successfully")
+	return nil
+}
+
 // Initialize pgx pool for application use.
 func (s *Service) init() error {
 	var err error
@@ -70,32 +96,6 @@ func (s *Service) init() error {
 	connectionRetries++
 
 	return s.init()
-}
-
-// Handles seeding the database with seed.go file.
-func (s *Service) seed() error {
-	path, err := filepath.Abs("seed.sql")
-	if err != nil {
-		log.Fatal("error retrieving seed.sql file path::", err)
-		return err
-	}
-
-	bytes, ioErr := ioutil.ReadFile(path)
-	if ioErr != nil {
-		log.Fatal("error reading seed.sql file::", err)
-		return err
-	}
-
-	ctx := context.Background()
-	sql := string(bytes)
-	_, err = s.Pool.Exec(ctx, sql)
-	if err != nil {
-		log.Println("error executing seed SQL::", err)
-		return err
-	}
-
-	log.Println("database seeded successfully")
-	return nil
 }
 
 // Util wrapper for parse to handle error.

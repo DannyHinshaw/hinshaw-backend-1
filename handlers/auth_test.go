@@ -14,7 +14,6 @@ func (suite *HandlersTestSuite) TestGenerateJWT() {
 	suite.NoError(err)
 	suite.NotNil(jwtPayload)
 	suite.NotNil(jwtPayload.AccessToken)
-	suite.NotNil(jwtPayload.RefreshToken)
 
 	valid, err := mw.ValidateJWT(jwtPayload.AccessToken)
 	suite.NoError(err)

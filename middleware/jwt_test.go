@@ -15,7 +15,6 @@ func (suite *JWTTestSuite) TestGenerateJWT() {
 	suite.NoError(err)
 	suite.NotNil(jwtPayload)
 	suite.NotNil(jwtPayload.AccessToken)
-	suite.NotNil(jwtPayload.RefreshToken)
 }
 
 func (suite *JWTTestSuite) TestValidateJWT() {
@@ -23,7 +22,6 @@ func (suite *JWTTestSuite) TestValidateJWT() {
 	suite.NoError(err)
 	suite.NotNil(jwtPayload)
 	suite.NotNil(jwtPayload.AccessToken)
-	suite.NotNil(jwtPayload.RefreshToken)
 
 	valid, err := ValidateJWT(jwtPayload.AccessToken)
 	suite.NoError(err)

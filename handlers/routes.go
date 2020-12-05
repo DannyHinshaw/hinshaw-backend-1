@@ -28,9 +28,8 @@ func (h *Handler) RegisterRoutes(v1 *echo.Echo) {
 	===================================*/
 
 	// Auth
-	r.POST("/logout", h.POSTLogout)
-	r.POST("/refresh_token", h.POSTRefreshToken)
 	r.POST("/validate", h.POSTValidateToken)
+	r.POST("/logout", h.POSTLogout)
 
 	// Customers
 	r.GET("/customers", h.GETCustomers)

@@ -75,7 +75,7 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 	bytes := []byte(password)
 	userAuth, err := h.DBService.QueryUserAuth(email, h.Context)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError)
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid credentials.")
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(userAuth.Password), bytes)
@@ -99,9 +99,4 @@ func (h *Handler) POSTLogout(c echo.Context) error {
 
 func (h *Handler) POSTValidateToken(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Token validated successfully.")
-}
-
-func (h *Handler) POSTRefreshToken(c echo.Context) error {
-	// TODO: Get JWT from header and parse out user id. Then remove token.
-	return c.JSON(http.StatusOK, "User logout successful.")
 }

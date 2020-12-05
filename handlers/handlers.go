@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"hinshaw-backend-1/db"
-	mw "hinshaw-backend-1/middleware"
 )
 
 type Handler struct {
@@ -26,7 +25,8 @@ func NewHandler(dbService db.IService) *Handler {
 func (h *Handler) HandlerMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		h.Context = c.Request().Context()
-		h.UserId = mw.GetUserId(c)
+		// TODO: If useful
+		//h.UserId = mw.GetUserId(c)
 
 		return next(c)
 	}

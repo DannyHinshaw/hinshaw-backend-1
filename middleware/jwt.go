@@ -10,8 +10,7 @@ import (
 )
 
 type JWTPayload struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	AccessToken string `json:"access_token"`
 }
 
 var jwtSecret = os.Getenv("JWT_SECRET")
@@ -20,11 +19,9 @@ var Secret = []byte(jwtSecret)
 // Handles generating new JWTs for sessions tokens.
 func GenerateJWT(userId string) (*JWTPayload, error) {
 	signingMethod := jwt.SigningMethodHS512
-
-	// Config claims for short-lived token.
 	token := jwt.New(signingMethod)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 	claims["userId"] = userId
 
 	// Generate the signed token.
@@ -34,22 +31,7 @@ func GenerateJWT(userId string) (*JWTPayload, error) {
 		return nil, err
 	}
 
-	// Generate long lived refresh token.
-	refreshToken := jwt.New(signingMethod)
-	rtClaims := refreshToken.Claims.(jwt.MapClaims)
-	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
-	refresh, err := refreshToken.SignedString(Secret)
-	if err != nil {
-		log.Println("error signing refresh token::", err)
-		return nil, err
-	}
-
-	payload := &JWTPayload{
-		AccessToken:  access,
-		RefreshToken: refresh,
-	}
-
-	return payload, nil
+	return &JWTPayload{AccessToken: access}, nil
 }
 
 // Handles validating a JWTs by alg in header and signature with secret.
@@ -80,5 +62,10 @@ func ValidateJWT(accessToken string) (bool, error) {
 
 // Configuration for JWT middleware.
 var JWTConf = middleware.JWTConfig{
-	SigningKey: Secret,
+	SigningKey:    Secret,
+	SigningMethod: jwt.SigningMethodHS512.Name,
+	ErrorHandler: func(err error) error {
+		log.Println("error validating JWT in middleware::", err)
+		return err
+	},
 }

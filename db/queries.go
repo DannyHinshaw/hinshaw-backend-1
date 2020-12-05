@@ -35,11 +35,10 @@ func HashPassword(password string) (string, error) {
 // Handles checking if a user already exists by email address.
 func (s *Service) QueryUserEmailExists(email string, ctx context.Context) (bool, error) {
 	var id string
-	q := "SELECT id FROM users where email=$1;"
+	q := "SELECT id FROM app_users where email=$1;"
 	err := s.Pool.QueryRow(ctx, q, email).Scan(&id)
-	if err != nil {
-		log.Println("error querying user with email::", email)
-		return false, err
+	if err == nil {
+		return true, nil
 	}
 
 	if id == "" {
@@ -52,10 +51,10 @@ func (s *Service) QueryUserEmailExists(email string, ctx context.Context) (bool,
 // Handles retrieving a users id and password from db..
 func (s *Service) QueryUserAuth(email string, ctx context.Context) (*UserAuth, error) {
 	var userAuth UserAuth
-	q := "SELECT id, password FROM users where email=$1;"
+	q := "SELECT id, password FROM app_users where email=$1;"
 	err := s.Pool.QueryRow(ctx, q, email).Scan(&userAuth.UserId, &userAuth.Password)
 	if err != nil || userAuth.Password == "" {
-		log.Println("error querying password with email::", email)
+		log.Printf("error querying password for %s:: %s", email, err)
 		return nil, err
 	}
 
@@ -96,7 +95,6 @@ func (s *Service) AddNewUser(email string, password string, ctx context.Context)
 
 	// Create user id
 	userId := uuid.NewV4()
-	log.Println("userId::", userId)
 
 	// Hash/salt the password for db.
 	hashedPassword, err := HashPassword(password)
@@ -105,13 +103,8 @@ func (s *Service) AddNewUser(email string, password string, ctx context.Context)
 		return err
 	}
 
-	q := "INSERT INTO users (id, email, password) VALUES ($1, $2, $3);"
-	row := s.Pool.QueryRow(ctx, q, userId, email, hashedPassword)
-	log.Println("AddNewUser::row", row)
-	if row != nil {
-		log.Println("error adding new user with email::", email)
-		return err
-	}
+	q := "INSERT INTO app_users (id, email, password) VALUES ($1, $2, $3);"
+	s.Pool.QueryRow(ctx, q, userId, email, hashedPassword)
 
 	return nil
 }
