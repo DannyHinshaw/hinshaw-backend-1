@@ -13,7 +13,7 @@ func (suite *HandlersTestSuite) TestHandler_GETHealth() {
 	e = echo.New()
 
 	// Register URL endpoints (skip middleware for these tests as they read the request body and ruin it)
-	h.RegisterRoutes(e)
+	h.RegisterRouteHandlers(e)
 
 	req := httptest.NewRequest(echo.GET, "/health", nil)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

@@ -5,7 +5,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4/middleware"
 	"log"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -58,6 +60,17 @@ func ValidateJWT(accessToken string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+// Util function to extract JWT from request headers.
+func ExtractToken(r *http.Request) string {
+	bearToken := r.Header.Get("Authorization")
+	strArr := strings.Split(bearToken, " ")
+	if len(strArr) == 2 {
+		return strArr[1]
+	}
+
+	return ""
 }
 
 // Configuration for JWT middleware.

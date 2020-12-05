@@ -5,6 +5,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	mw "hinshaw-backend-1/middleware"
 	"hinshaw-backend-1/schemas"
+	"log"
 	"net/http"
 )
 
@@ -88,12 +89,18 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
+	err = h.RedisService.SetKeyStringRedis(jwtPayload.AccessToken, userAuth.UserId)
+	if err != nil {
+		log.Println("error saving jwt in redis on login::", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
 	return c.JSON(http.StatusOK, jwtPayload)
 }
 
-// Handles user logout.
+// Handles user logout by removing key from redis.
 func (h *Handler) POSTLogout(c echo.Context) error {
-	// TODO: Get JWT from header and parse out user id. Then remove token.
+	h.RedisService.ExpireKey(h.Token)
 	return c.JSON(http.StatusOK, "User logout successful.")
 }
 

@@ -54,7 +54,7 @@ func newTestRequest(method string, url string, body io.Reader, token string) (ec
 	e = echo.New()
 
 	// Register URL endpoints (skip middleware for these tests as they read the request body and ruin it)
-	h.RegisterRoutes(e)
+	h.RegisterRouteHandlers(e)
 
 	req := httptest.NewRequest(method, url, body)
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)

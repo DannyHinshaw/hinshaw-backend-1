@@ -38,7 +38,7 @@ func main() {
 	e.Use(h.HandlerMiddleware)
 
 	// Register the URL endpoints to Handler
-	h.RegisterRoutes(e)
+	h.RegisterRouteHandlers(e)
 
 	// Serve
 	e.Logger.Fatal(e.Start(":8080"))

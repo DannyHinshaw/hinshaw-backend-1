@@ -80,7 +80,7 @@ func (suite *HandlersTestSuite) TestHandler_POSTLogin() {
 }
 
 func (suite *HandlersTestSuite) TestHandler_POSTLogout() {
-	c, _ := newTestRequest(echo.POST, "/logout", strings.NewReader(""), "TODO: TOKEN")
+	c, _ := newTestRequest(echo.POST, "/logout", strings.NewReader(""), "JWT")
 	err := h.POSTLogout(c)
 	suite.NoError(err)
 }
