@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"hinshaw-backend-1/db"
-	t "hinshaw-backend-1/test"
+	td "hinshaw-backend-1/test"
 
 	"io"
 	"net/http/httptest"
@@ -24,14 +24,17 @@ type HandlersTestSuite struct {
 
 // Reset mock service and mock data.
 func (suite *HandlersTestSuite) SetupTest() {
+	err := os.Setenv("JWT_SECRET", td.JwtSecret)
+	suite.NoError(err)
+
 	mockDB := &db.MockService{}
-	err := mockDB.ParseDB(os.Getenv("DATABASE_URL"))
+	err = mockDB.ParseDB(os.Getenv("DATABASE_URL"))
 	suite.NoError(err)
 	err = mockDB.Init()
 	suite.NoError(err)
 
 	h = NewHandler(mockDB)
-	h.UserId = t.UserUUID
+	h.UserId = td.UserUUID
 }
 
 // Util function to bootstrap a test authed API request with boilerplate.

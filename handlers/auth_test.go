@@ -2,8 +2,22 @@ package handlers
 
 import (
 	"github.com/labstack/echo/v4"
+	mw "hinshaw-backend-1/middleware"
+	td "hinshaw-backend-1/test"
 	"strings"
 )
+
+func (suite *HandlersTestSuite) TestGenerateJWT() {
+	jwtPayload, err := mw.GenerateJWT(td.UserUUID)
+	suite.NoError(err)
+	suite.NotNil(jwtPayload)
+	suite.NotNil(jwtPayload.AccessToken)
+	suite.NotNil(jwtPayload.RefreshToken)
+
+	valid, err := mw.ValidateJWT(jwtPayload.AccessToken)
+	suite.NoError(err)
+	suite.True(valid)
+}
 
 func (suite *HandlersTestSuite) TestHandler_POSTRegister() {
 

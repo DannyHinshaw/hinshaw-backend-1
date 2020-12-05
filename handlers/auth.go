@@ -81,11 +81,21 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 	}
 
 	// TODO: JWT and user id
+
 	return c.JSON(http.StatusOK, "User login successful.")
 }
 
 // Handles user logout.
 func (h *Handler) POSTLogout(c echo.Context) error {
+	// TODO: Get JWT from header and parse out user id. Then remove token.
+	return c.JSON(http.StatusOK, "User logout successful.")
+}
+
+func (h *Handler) POSTValidateToken(c echo.Context) error {
+	// TODO: Get JWT from header and parse out user id. Then remove token.
+	return c.JSON(http.StatusOK, "User logout successful.")
+}
+func (h *Handler) POSTRefreshToken(c echo.Context) error {
 	// TODO: Get JWT from header and parse out user id. Then remove token.
 	return c.JSON(http.StatusOK, "User logout successful.")
 }

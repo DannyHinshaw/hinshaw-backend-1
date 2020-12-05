@@ -10,10 +10,12 @@ services:
 
   db:
     image: postgres
+    ports:
+      - 5432:5432
     environment:
-      - POSTGRES_DB=skynet
-      - POSTGRES_USER=philanthropic
-      - POSTGRES_PASSWORD=narwhal
+      POSTGRES_DB: "skynet"
+      POSTGRES_USER: "philanthropic"
+      POSTGRES_PASSWORD: "narwhal"
 
   api:
     container_name: api
@@ -27,3 +29,4 @@ services:
       - db
     environment:
       DATABASE_URL: "postgres://philanthropic:narwhal@db:5432/skynet"
+      JWT_SECRET: "99AE99706241529D636298C3C0441FE927344BEB064972EC0AE2223CE8DE3C59"
