@@ -12,7 +12,6 @@ github.com/davecgh/go-spew/spew
 github.com/dgrijalva/jwt-go
 # github.com/elliotchance/redismock v1.5.3
 ## explicit
-github.com/elliotchance/redismock
 # github.com/georgysavva/scany v0.2.7
 ## explicit
 # github.com/go-redis/redis v6.15.9+incompatible
@@ -70,12 +69,9 @@ github.com/pmezard/go-difflib/difflib
 # github.com/satori/go.uuid v1.2.0
 ## explicit
 github.com/satori/go.uuid
-# github.com/stretchr/objx v0.2.0
-github.com/stretchr/objx
 # github.com/stretchr/testify v1.5.1
 ## explicit
 github.com/stretchr/testify/assert
-github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
 github.com/stretchr/testify/suite
 # github.com/valyala/bytebufferpool v1.0.0
