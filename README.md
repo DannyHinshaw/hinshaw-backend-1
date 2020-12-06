@@ -12,12 +12,11 @@ A simple web app to demonstrate a basic registration/authentication flow and bac
 
 ## Tech-Stack:
 
-**API** - Written in Golang with the [Echo framework](https://echo.labstack.com/). I chose Echo because I like it and I've been using it recently 
-on a project, so it sped up development a bit by familiarity.
+**REST API** - Written in Golang with [echo](https://echo.labstack.com/); fast, simple, lightweight and easily extended web framework.
 
 **Database** - [Postgres](https://www.postgresql.org/), my goto open-source database.
 
-**Cache** - [Redis](https://redis.io/), my goto open-source db for fast cache storage.
+**Cache** - [Redis](https://redis.io/), my goto open-source cache storage.
 
 **NGINX/HTML** - Web app built with basic html, css and javascript (bare-bones), served by a simple NGINX web server.
 
@@ -26,13 +25,13 @@ on a project, so it sped up development a bit by familiarity.
 
 - Authentication and authorization with [JWT](https://jwt.io/) using a HMAC-512 key.
 - Auth features; registration, login, and logout.
-- Users can register with email and password (no duplicate emails, minimal password requirements and passwords hashed/salted).
+- Users can register with email and password (no duplicate emails, basic password requirements and passwords hashed/salted).
 - [CORS](https://echo.labstack.com/middleware/cors) configured as well as [additional middleware](https://echo.labstack.com/middleware/secure) 
 for basic protection against XSS, content type sniffing etc.
 
 ## 3rd Party Modules
 
-- [echo](https://github.com/labstack/echo) - REST API framework.
+- [echo](https://github.com/labstack/echo) - Web/REST-API framework.
 - [pgx](https://github.com/jackc/pgx) - For PostgreSQL driver and interactions.
 - [uuid](https://github.com/satori/go.uuid) - For generating v4 UUID's for users etc.
 - [jwt-go](https://github.com/alicebob/miniredis) - For unit testing redis.
@@ -80,7 +79,7 @@ Also, create a /members area that informs the user they are logged in and allows
 
 ## Room for Improvement
 
-Things left unimplemented simply for the sake of time and not technically being requirements (non-exhaustive list).
+Some things left unimplemented simply for the sake of time and not technically being requirements (non-exhaustive list).
 
 - Implement `refresh_token` http-only cookie for JWT auth with API endpoint and web app handling.
 - Implement shorter lived JWT `access_token` (when `refresh_token` implemented).
@@ -89,4 +88,4 @@ Things left unimplemented simply for the sake of time and not technically being 
 - Better password requirements, currently the only requirement is that it is greater than 5 characters.
 - Implement email validation for user registration.
 - Implement 2FA.
-- Implement integrations tests and CI/CD pipeline.
+- Implement integration tests and CI/CD pipeline.
