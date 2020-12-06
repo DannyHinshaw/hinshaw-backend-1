@@ -99,8 +99,10 @@
 
 		resetMessageEl(errElId);
 	}).catch(err => {
-		const m = err && err.message ? err.message : err;
-		return handleMessageEl(errElId, m);
+		handleMessageEl(errElId, err);
+		setTimeout(() => {
+			window.location.pathname = "/";
+		}, 5000);
 	});
 </script>
 </html>

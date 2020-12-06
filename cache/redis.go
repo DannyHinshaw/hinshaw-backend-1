@@ -90,12 +90,13 @@ func (s *Service) GetKeyInRedis(key string) string {
 
 // Check if a key is in redis.
 func (s *Service) IsKeyInRedis(key string) bool {
-	scrapeKey, err := s.Client.Get(key).Result()
+	userId, err := s.Client.Get(key).Result()
+	log.Println("REDIS::userId::", userId)
 	if err == redis.Nil {
 		return false
 	} else if err != nil {
 		return false
-	} else if scrapeKey == "" {
+	} else if userId == "" {
 		return false
 	}
 

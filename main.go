@@ -33,7 +33,17 @@ func main() {
 	h := handlers.NewHandler(&dbs, rdc)
 
 	// Setup middlewares
-	e.Use(middleware.CORS())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"http://localhost:8000"},
+		AllowHeaders: []string{
+			echo.HeaderAuthorization, echo.HeaderOrigin,
+			echo.HeaderContentType, echo.HeaderAccept,
+		},
+	}))
+	e.Use(middleware.SecureWithConfig(middleware.SecureConfig{
+		XFrameOptions:         "DENY",
+		ContentSecurityPolicy: "default-src 'self'",
+	}))
 	e.Use(mw.RouteLogger)
 	e.Use(h.HandlerMiddleware)
 

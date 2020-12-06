@@ -3,6 +3,7 @@ version: "3.8"
 services:
   web:
     image: nginx
+    container_name: web
     ports:
       - 8000:80
     volumes:
@@ -10,6 +11,7 @@ services:
 
   db:
     image: postgres
+    container_name: db
     environment:
       POSTGRES_DB: "skynet"
       POSTGRES_USER: "philanthropic"
@@ -17,6 +19,7 @@ services:
 
   redis:
     image: redis:alpine
+    container_name: redis
 
   api:
     container_name: api
