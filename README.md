@@ -19,7 +19,7 @@ on a project, so it sped up development a bit by familiarity.
 
 **Cache** - [Redis](https://redis.io/), my goto open-source db for fast cache storage.
 
-**NGINX*/HTML* - Web app built with basic html, css and javascript (bare-bones), served by a simple NGINX web server.
+**NGINX/HTML** - Web app built with basic html, css and javascript (bare-bones), served by a simple NGINX web server.
 
 
 ## Features
@@ -44,7 +44,7 @@ for basic protection against XSS, content type sniffing etc.
 
 1. Go, Docker, and Docker compose should be pre-installed (also Make if using Makefile).
 
-2. Clone repo
+2. Clone repo: `git clone https://github.com/DannyHinshaw/hinshaw-backend-1.git`
 
 3. To start run:
 ```shell script
