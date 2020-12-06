@@ -7,7 +7,7 @@ A simple web app to demonstrate a basic registration/authentication flow and bac
 
 ## Architecture Overview
 
-![Architecture Image](https://github.com/DannyHinshaw/hinshaw-backend-1/.github/images/architecture-overview.png)
+![Architecture Image](https://raw.githubusercontent.com/DannyHinshaw/hinshaw-backend-1/main/.github/images/architecture-overview.png)
 
 
 ## Tech-Stack:
