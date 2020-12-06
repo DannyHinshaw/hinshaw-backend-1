@@ -47,6 +47,8 @@ for basic protection against XSS, content type sniffing etc.
 - Docker Compose
 - Make (optional)
 
+**Run Steps**
+
 1. Clone repo: `git clone https://github.com/DannyHinshaw/hinshaw-backend-1.git`
 
 2. To start run:
