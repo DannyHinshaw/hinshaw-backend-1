@@ -21,7 +21,7 @@ type Handler struct {
 	Token        string
 }
 
-// Create a new Handler with option for DI.
+// Create a new Handler with DI for services.
 func NewHandler(dbService db.IService, redisService cache.IService) *Handler {
 	return &Handler{
 		RedisService: redisService,
@@ -46,8 +46,7 @@ func (h *Handler) JWTRedisMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		token := mw.ExtractToken(c.Request())
 		isValid := h.RedisService.IsKeyInRedis(token)
 		if !isValid {
-			m := "unauthorized token in redis middleware::" + token
-			log.Println(m)
+			log.Println("attempted unauthorized token use in redis middleware::" + token)
 			return echo.NewHTTPError(http.StatusUnauthorized, "Session expired.")
 		}
 
@@ -80,13 +79,13 @@ func (h *Handler) RegisterRouteHandlers(v1 *echo.Echo) {
 	v1.POST("/register", h.POSTRegister)
 	v1.POST("/login", h.POSTLogin)
 
+	/** 	Restricted Endpoints
+	===================================*/
+
 	// Restricted group
 	r := v1.Group("")
 	r.Use(middleware.JWTWithConfig(mw.JWTConf))
 	r.Use(h.JWTRedisMiddleware)
-
-	/** 	Restricted Endpoints
-	===================================*/
 
 	// Auth
 	r.POST("/validate", h.POSTValidateToken)

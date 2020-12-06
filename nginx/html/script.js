@@ -121,7 +121,13 @@ const getCustomers = () => {
 			"Authorization": "Bearer " + sessionStorage.getItem(jwtKey),
 			"Content-Type": "application/json; charset=UTF-8"
 		}
-	}).then(res => res.json());
+	}).then(res => {
+		if (res.status === 401) {
+			throw Error("Session expired, redirecting to login...");
+		}
+
+		return res.json();
+	});
 };
 
 /**
