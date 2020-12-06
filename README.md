@@ -89,6 +89,7 @@ Also, create a /members area that informs the user they are logged in and allows
 
 Some things left unimplemented simply for the sake of time and not technically being requirements (non-exhaustive list).
 
+- Implement SSL.
 - Implement `refresh_token` http-only cookie for JWT auth with API endpoint and web app handling.
 - Implement shorter lived JWT `access_token` (when `refresh_token` implemented).
 - Keep `access_token` in memory instead of `sessionStorage` for better security against XSS (when `refresh_token` implemented).
