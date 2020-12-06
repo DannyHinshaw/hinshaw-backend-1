@@ -41,11 +41,15 @@ for basic protection against XSS, content type sniffing etc.
 
 ## Install & Run
 
-1. Go, Docker, and Docker compose should be pre-installed (also Make if using Makefile).
+**Requirements**
 
-2. Clone repo: `git clone https://github.com/DannyHinshaw/hinshaw-backend-1.git`
+- Docker
+- Docker Compose
+- Make (optional)
 
-3. To start run:
+1. Clone repo: `git clone https://github.com/DannyHinshaw/hinshaw-backend-1.git`
+
+2. To start run:
 ```shell script
 make start
 ```
@@ -55,6 +59,8 @@ or
 ```shell script
 docker-compose up --build -d
 ```
+
+3. Visit `http://localhost:8000` to use the web app.
 
 4. To stop run: 
 ```shell script
