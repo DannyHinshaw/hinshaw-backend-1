@@ -20,7 +20,7 @@ func (h *Handler) POSTRegister(c echo.Context) error {
 	// Extract request payload data.
 	payload := new(AuthPayload)
 	if err := schemas.HandleBindData(c, payload); err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Registration payload was malformed.")
+		return err
 	}
 
 	email := payload.Email
@@ -59,7 +59,7 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 	// Extract request payload data.
 	payload := new(AuthPayload)
 	if err := schemas.HandleBindData(c, payload); err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Login payload was malformed.")
+		return err
 	}
 
 	email := payload.Email
@@ -89,7 +89,7 @@ func (h *Handler) POSTLogin(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	err = h.RedisService.SetKeyStringRedis(jwtPayload.AccessToken, userAuth.UserId)
+	err = h.RedisService.SetJWTRedis(jwtPayload.AccessToken, userAuth.UserId)
 	if err != nil {
 		log.Println("error saving jwt in redis on login::", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)

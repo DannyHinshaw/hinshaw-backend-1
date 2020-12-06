@@ -47,7 +47,7 @@ func (s *MockService) GetAllRedisKeys() []string {
 }
 
 // Set a string key in redis.
-func (s *MockService) SetKeyStringRedis(key string, val string) error {
+func (s *MockService) SetJWTRedis(key string, val string) error {
 	err := s.Client.Set(key, val, 0).Err()
 	if err != nil {
 		log.Println(err.Error())

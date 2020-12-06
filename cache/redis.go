@@ -9,7 +9,7 @@ import (
 )
 
 type IService interface {
-	SetKeyStringRedis(key string, val string) error
+	SetJWTRedis(key string, val string) error
 	GetKeyInRedis(key string) string
 	IsKeyInRedis(key string) bool
 	GetAllRedisKeys() []string
@@ -72,8 +72,8 @@ func (s *Service) GetAllRedisKeys() []string {
 }
 
 // Set a string key in redis.
-func (s *Service) SetKeyStringRedis(key string, val string) error {
-	err := s.Client.Set(key, val, 0).Err()
+func (s *Service) SetJWTRedis(jwt string, userId string) error {
+	err := s.Client.Set(jwt, userId, time.Hour).Err()
 	if err != nil {
 		log.Println(err.Error())
 		return err

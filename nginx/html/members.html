@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Members</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="form.css">
+    <style type="text/css">
+        body {
+            display: block;
+            margin: 0;
+        }
+
+        nav {
+            background-color: #4a4add;
+            display: flex;
+            justify-content: space-between;
+            padding: .5rem;
+        }
+
+        h3 {
+            color: whitesmoke;
+            margin: 0;
+            padding: .5rem;
+        }
+
+        button:hover {
+            cursor: pointer;
+        }
+
+        #customersContainer {
+            margin: 4rem;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <h3>THE COMPANY&trade;</h3>
+    <button onclick="return window.location.pathname = '/'">
+        LOG OUT
+    </button>
+</nav>
+<div id="customersContainer">
+    <p id="customersError" class="error-message"></p>
+    <h2>Customers</h2>
+    <br/>
+    <table>
+        <tbody id="customersTable">
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Equifax</th>
+            <th>Experian</th>
+            <th>TransUnion</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+<script type="application/javascript" src="script.js"></script>
+<script type="application/javascript">
+	if (!sessionStorage.getItem(jwtKey)) {
+		window.location.pathname = "/";
+	}
+
+	/**
+	 * Util curried function for adding new row data to the table.
+	 * @param {HTMLTableElement} tbodyRef - Reference to html table body.
+	 * @returns {function(*): void}
+	 */
+	const buildRowAdder = (tbodyRef) => (data) => {
+		const newRow = tbodyRef.insertRow();
+		for (const key in data) {
+			if (data.hasOwnProperty(key)) {
+				const val = data[key];
+				const newCell = newRow.insertCell();
+				const newText = document.createTextNode(val);
+				newCell.appendChild(newText);
+			}
+		}
+	};
+
+	// Fetch the customer data and display it in table.
+	const errElId = "customersError";
+	getCustomers().then(data => {
+		if (!data || !data.length) {
+			return handleMessageEl(errElId, "No customers available to view");
+		}
+
+		const tbodyRef = document.getElementById("customersTable");
+		const addRow = buildRowAdder(tbodyRef);
+		const len = data.length;
+		for (let i = 0; i < len; i++) {
+			const currRow = data[i];
+			addRow(currRow);
+		}
+
+		resetMessageEl(errElId);
+	}).catch(err => {
+		const m = err && err.message ? err.message : err;
+		return handleMessageEl(errElId, m);
+	});
+</script>
+</html>
