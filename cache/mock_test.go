@@ -19,13 +19,13 @@ func (suite *CacheTestSuite) SetupTest() {
 }
 
 func (suite *CacheTestSuite) TestMockService_SetKeyStringRedis() {
-	err := MockRedis.SetKeyStringRedis(testKey, testVal)
+	err := MockRedis.SetJWTRedis(testKey, testVal)
 	suite.NoError(err)
 
 	exists := MockRedis.IsKeyInRedis(testKey)
 	suite.True(exists)
 
-	err = MockRedis.SetKeyStringRedis(testKey, "new_val")
+	err = MockRedis.SetJWTRedis(testKey, "new_val")
 	suite.NoError(err)
 }
 
@@ -33,7 +33,7 @@ func (suite *CacheTestSuite) TestMockService_IsKeyInRedis() {
 	exists := MockRedis.IsKeyInRedis(testKey)
 	suite.False(exists)
 
-	err := MockRedis.SetKeyStringRedis(testKey, testVal)
+	err := MockRedis.SetJWTRedis(testKey, testVal)
 	suite.NoError(err)
 
 	exists = MockRedis.IsKeyInRedis(testKey)
@@ -41,7 +41,7 @@ func (suite *CacheTestSuite) TestMockService_IsKeyInRedis() {
 }
 
 func (suite *CacheTestSuite) TestMockService_ExpireKey() {
-	err := MockRedis.SetKeyStringRedis(testKey, testVal)
+	err := MockRedis.SetJWTRedis(testKey, testVal)
 	suite.NoError(err)
 
 	MockRedis.ExpireKey(testKey)
@@ -51,7 +51,7 @@ func (suite *CacheTestSuite) TestMockService_ExpireKey() {
 }
 
 func (suite *CacheTestSuite) TestMockService_GetKeyInRedis() {
-	err := MockRedis.SetKeyStringRedis(testKey, testVal)
+	err := MockRedis.SetJWTRedis(testKey, testVal)
 	suite.NoError(err)
 
 	val := MockRedis.GetKeyInRedis(testKey)

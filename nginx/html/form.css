@@ -1,0 +1,46 @@
+body {
+    display: flex;
+    justify-content: center;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+}
+
+#container {
+    display: flex;
+    margin: 4rem;
+}
+
+form {
+    border: #6e6a6a 1px solid;
+    border-radius: 5px;
+    padding: 5rem;
+}
+
+input, label {
+    display: block;
+    padding: 4px;
+}
+
+#submitButton {
+    display: block;
+    margin: 1rem 0;
+}
+
+#submitButton:hover {
+    cursor: pointer;
+}
+
+.error-message {
+    display: none;
+    background-color: #ee4d4d;
+    color: antiquewhite;
+    max-width: 8rem;
+    padding: .5rem;
+}
+
+.success-message {
+    display: none;
+    background-color: #6bee4d;
+    max-width: 8rem;
+    padding: .5rem;
+}

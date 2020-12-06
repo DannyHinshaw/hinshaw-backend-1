@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Register</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="form.css">
 </head>
 <body>
 <div id="container">
-    <form onsubmit="return login(event)">
+    <form onsubmit="return register(event)">
         <h2>
-            Login
+            Register
         </h2>
 
         <label for="email">
@@ -31,18 +31,14 @@
             Submit
         </button>
 
-        <a href="register.html">
-            Register
+        <a href="index.html">
+            Back to login
         </a>
 
-        <p id="loginError" class="error-message"></p>
-        <p id="loginSuccess" class="success-message"></p>
+        <p id="registerError" class="error-message"></p>
+        <p id="registerSuccess" class="success-message"></p>
     </form>
 </div>
 </body>
 <script type="application/javascript" src="script.js"></script>
-<script type="application/javascript">
-	logout();
-	sessionStorage.removeItem(jwtKey);
-</script>
 </html>
