@@ -34,8 +34,9 @@ for basic protection against XSS, content type sniffing etc.
 - [echo](https://github.com/labstack/echo) - Web/REST-API framework.
 - [pgx](https://github.com/jackc/pgx) - For PostgreSQL driver and interactions.
 - [uuid](https://github.com/satori/go.uuid) - For generating v4 UUID's for users etc.
-- [jwt-go](https://github.com/alicebob/miniredis) - For unit testing redis.
-- [crypto](https://golang.org/x/crypto) - Hashing/salting passwords.
+- [jwt-go](https://github.com/dgrijalva/jwt-go) - For JWT generation and validation.
+- [miniredis](https://github.com/alicebob/miniredis) - For unit testing redis.
+- [crypto](https://golang.org/x/crypto) - For hashing/salting passwords.
 - [testify](https://github.com/stretchr/testify) - For unit test suites.
 
 
