@@ -93,7 +93,7 @@ Some things left unimplemented simply for the sake of time and not technically b
 - Implement `refresh_token` http-only cookie for JWT auth with API endpoint and web app handling.
 - Implement shorter lived JWT `access_token` (when `refresh_token` implemented).
 - Keep `access_token` in memory instead of `sessionStorage` for better security against XSS (when `refresh_token` implemented).
-- Implement JWT validation client-side.
+- Add SHA-512 of raw request body `content_hash` to claims and implement client-side JWT validation.
 - Better password requirements, currently the only requirement is that it is greater than 5 characters.
 - Implement email validation for user registration.
 - Implement 2FA.
